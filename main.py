@@ -1,20 +1,18 @@
 from fastapi import FastAPI
-from contextlib import asynccontextmanager
+from presentation import TodoApiRouter
+from presentation import TodoWebRouter
+from configs import EntityBase, DBEngine
 
-from database import create_tables, get_engine, get_model
-from routers import router
 
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    engine = get_engine()
-    model = get_model()
-    create_tables(engine, model)
-    yield
-    engine.dispose()
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     DBModel.metadata.create_all(DBEngine)
+#     yield
+#     DBEngine.dispose()
 
 
 app = FastAPI()
-app.include_router(router)
+EntityBase.metadata.create_all(DBEngine)
 
-
+app.include_router(TodoApiRouter)
+app.include_router(TodoWebRouter)

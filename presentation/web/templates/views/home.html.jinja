@@ -1,0 +1,63 @@
+{% extends "base.html.jinja" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+     <div style="margin-top: 50px;" class="ui container">
+        {% with message = flash.message %}
+            {% if message %}
+                <div class="ui divided list small info message">
+                    <i class="close icon"></i>
+                    <div class="item">
+                      <div class="">
+                          <div class="header"> Messages</div>
+                          <p>{{ message }}</p>
+                      </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+
+        <h1 class="ui center aligned header ">To Do App</h1>
+        <div class="ui small basic icon buttons">
+          {#  <button class="ui button"><a href="{{ url_for("print_todos") }}"><i class="file icon"></i></a></button>#}
+            <button class="ui button"><a href=""><i class="file icon"></i></a></button>
+          <button class="ui button"><i class="save icon"></i></button>
+          <button class="ui button"><i class="upload icon"></i></button>
+          <button class="ui button"><i class="download icon"></i></button>
+        </div>
+
+       {# <form class="ui form" method="POST" action="{{ url_for("add_todos") }}">
+            {{ form.hidden_tag() }}
+            {{ form.item.label }} {{ form.item(size=30) }}
+             <input class="ui blue button" type="submit" value="Add">
+        </form>#}
+
+
+        <form class="ui form" action="{{ url_for("add_todo") }}" method="post">
+            <div class="field">
+                <label>Todo Title</label>
+                <input type="text" name="title" placeholder="Enter Todo..."><br>
+            </div>
+            <button class="ui blue button" type="submit">Add</button>
+        </form>
+
+        <hr>
+
+        {% for todo in todos %}
+        <div class="ui segment">
+            <p class="ui big header">{{todo.id }} | {{ todo.task }}</p>
+
+            {% if todo.completed == False %}
+                <span class="ui gray label">Not Complete</span>
+            {% else %}
+                <span class="ui green label">Completed</span>
+            {% endif %}
+
+            <!--<a class="ui blue button" href="/update/{{ todo.id }}">Update</a>-->
+            <a class="ui blue button" href="{{url_for('update_todo',todo_id=todo.id)}}">Update</a>
+            <a class="ui red button" href="{{url_for('remove_todo', todo_id=todo.id)}}">Delete</a>
+        </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
